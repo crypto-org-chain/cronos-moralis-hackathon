@@ -28,7 +28,7 @@ const cx = classnames.bind(styles);
 const web3 = new Web3(Web3.givenProvider);
 
 // dashboard function
-const Minter: React.FC<any> = (): JSX.Element => {
+const Minter: React.FC = (): JSX.Element => {
 
   // other variables
   const { isAuthenticated, logout, user } = useMoralis();
