@@ -23,56 +23,70 @@ import {
 import { logo } from '../../utils/logos'
 import HooverSpringer from '../../components/HooverSpringer';
 
-// global dashboard variables
+// global variables
 const cx = classnames.bind(styles);
+
+// initialize web3 package with Metamask
 const web3 = new Web3(Web3.givenProvider);
 
-// dashboard function
+// minter function
 const Minter: React.FC = (): JSX.Element => {
 
-  // other variables
-  const { isAuthenticated, logout, user } = useMoralis();
+  // variables to check if user is authenticated
+  const {
+    isAuthenticated,
+    logout,
+    user
+  } = useMoralis();
   const router = useRouter();
 
-  // state variables
-  const [name, setName] = useState<any>('');
-  const [description, setDescription] = useState<any>('');
+  // variables to set state for the form to submit
+  const [name, setName] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
   const [file, setFile] = useState<any>(null);
 
-  // authentication 
+  // authentication to check if user is authenticated or not
   useEffect(() => {
-    if (!isAuthenticated) router.push('/');
+    if (!isAuthenticated)
+      router.push('/');
   }, [isAuthenticated]);
 
   // on submit function
   const onSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
+
       // save image to IPFS
-      const file1 = new Moralis.File(file.name, file);
-      await file1.saveIPFS();
-      const file1url = file1.ipfs();
+      const fileToIpfs = new Moralis.File(
+        file.name,
+        file)
+        ;
+      await fileToIpfs.saveIPFS();
+      const fileToIpfsurl = fileToIpfs.ipfs();
 
       // generate metadata and save to ipfs
       const metadata = {
         name,
         description,
-        image: file1url,
+        image: fileToIpfsurl,
       };
-      const file2 = new Moralis.File(`${name}metadata.json`, {
+      const fileToUpload = new Moralis.File(`${name}metadata.json`, {
         base64: Buffer.from(JSON.stringify(metadata)).toString('base64'),
       });
-      await file2.saveIPFS();
-      const metadataurl = file2.ipfs();
-      console.log(metadataurl);
+      await fileToUpload.saveIPFS();
+      const metadataurl = fileToUpload.ipfs();
+
       // interact with smart contract
-      const contract = new web3.eth.Contract(contractABI as any, contractAddress);
+      const contract = new web3.eth.Contract(
+        contractABI as any, 
+        contractAddress
+      );
       const response = await contract.methods
         .mint(metadataurl)
         .send({ from: user?.get('ethAddress') });
       const tokenId = response.events.Transfer.returnValues.tokenId;
       alert(
-        `NFT successfully minted. Contract address - ${contractAddress} and Token ID - ${tokenId}`
+        `New NFT minted under contract ${contractAddress}`
       );
     } catch (err) {
       console.error(err);

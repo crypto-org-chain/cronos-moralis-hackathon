@@ -1,5 +1,5 @@
-import { MoralisProvider } from "react-moralis";
-import "../styles/globals.css";
+import { MoralisProvider } from 'react-moralis';
+import '../styles/globals.css';
 import type { AppProps } from 'next/app'
 
 const MyApp: React.FC<any> = ({ Component, pageProps }: AppProps): JSX.Element => {

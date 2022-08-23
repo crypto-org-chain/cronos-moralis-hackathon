@@ -1,8 +1,8 @@
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useMoralis } from "react-moralis";
-import HooverSpringer from "../components/HooverSpringer";
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useMoralis } from 'react-moralis';
+import HooverSpringer from '../components/HooverSpringer';
 import styles from '../styles/Minter.module.css';
 
 const Home: React.FC = (): JSX.Element => {
@@ -13,7 +13,7 @@ const Home: React.FC = (): JSX.Element => {
 
   // authentication
   useEffect(() => {
-    if (isAuthenticated) router.push("/minter");
+    if (isAuthenticated) router.push('/minter');
   }, [isAuthenticated]);
 
   return (
@@ -21,7 +21,7 @@ const Home: React.FC = (): JSX.Element => {
       <HooverSpringer />
       <Head>
         <title>NFT Minter</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className={styles.form}>
         <button
